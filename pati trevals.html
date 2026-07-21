@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill of Supply - Pari Tour & Travels</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            color: #000;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+        
+        .action-bar {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .whatsapp-super-btn { 
+            background-color: #25D366; 
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            text-align: center;
+        }
+        
+        .add-row-btn { 
+            background-color: #f59e0b; 
+            color: #fff; 
+            margin: 15px auto 0 auto; 
+            display: block; 
+            padding: 8px 16px; 
+            font-size: 11px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .a4-landscape-container {
+            width: 100%; 
+            background-color: #fff;
+            padding: 20px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            position: relative; 
+            overflow: hidden;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 250' fill='none'><path d='M40,165 C30,165 15,160 15,145 C15,120 45,115 70,110 C90,105 115,85 140,75 C175,60 230,48 300,48 C360,48 440,52 475,70 C500,82 535,102 555,112 C575,122 585,130 585,142 C585,155 570,162 550,165 C540,165 530,160 525,150 C515,130 475,130 465,150 C460,162 450,165 300,165 C150,165 140,162 135,150 C125,130 85,130 75,150 C70,160 55,165 40,165 Z' stroke='%23333333' stroke-width='2' fill='none'/><circle cx='105' cy='150' r='25' stroke='%23333333' stroke-width='3' fill='none'/><circle cx='495' cy='150' r='25' stroke='%23333333' stroke-width='3' fill='none'/><path d='M145,78 L285,55 L285,110 L135,110 Z' stroke='%23333333' stroke-width='1.5'/><path d='M295,55 L445,74 L425,110 L295,110 Z' stroke='%23333333' stroke-width='1.5'/></svg>");
+            background-repeat: no-repeat;
+            background-position: center 58%;
+            background-size: 88% auto;
+        }
+
+        .a4-landscape-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: inherit;
+            background-repeat: no-repeat;
+            background-position: center 58%;
+            background-size: 88% auto;
+            opacity: 0.22;
+            filter: contrast(1.1) brightness(1.05);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 15px;
+            margin: 0 auto 12px auto;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            z-index: 1;
+        }
+
+        .outer-matrix {
+            border: 1px solid #000;
+            width: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+
+        .header-block {
+            display: flex;
+            padding: 4px;
+            border-bottom: 1px solid #000;
+            align-items: center;
+            background: #ffffff;
+        }
+        
+        .logo-container {
+            width: 52px;
+            height: 52px;
+            margin-right: 6px;
+            flex-shrink: 0;
+            background: #0b2341;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid #d4af37;
+        }
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: #0b2341;
+        }
+        
+        .brand-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .brand-name {
+            font-size: 10px;
+            font-weight: bold;
+            margin: 0 0 1px 0;
+        }
+        .brand-loc {
+            font-size: 6px;
+            margin: 0 0 4px 0;
+            font-weight: bold;
+        }
+
+        .driver-info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            width: 100%;
+        }
+        
+        .grid-two-col {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .field-row {
+            font-size: 8px;
+            font-weight: bold;
+            display: flex;
+            align-items: flex-end;
+            min-width: 0;
+        }
+        
+        .w-half-left { width: 55%; }
+        .w-half-right { width: 43%; }
+        .w-full-row { width: 100%; }
+
+        .field-row span {
+            margin-right: 2px;
+            white-space: nowrap;
+        }
+        
+        .fill-blank {
+            border: none;
+            border-bottom: 1px solid #000;
+            outline: none;
+            padding: 0px 1px;
+            font-size: 8px;
+            flex: 1;
+            font-weight: normal;
+            background: transparent;
+            min-width: 0;
+        }
+        
+        .locked-field {
+            font-weight: normal;
+            border-bottom: 1px solid #aaa;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .two-column-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid #000;
+            background: #ffffff;
+        }
+        .col-box { padding: 3px 4px; background: #ffffff; }
+        .col-box:first-child { border-right: 1px solid #000; }
+        .sect-header {
+            font-weight: bold;
+            font-size: 8px;
+            margin-bottom: 2px;
+        }
+
+        .table-and-summary-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #000;
+            padding: 3px;
+            font-size: 8px;
+            vertical-align: middle;
+            background: #ffffff;
+        }
+        .data-table th {
+            font-weight: bold;
+            text-align: left;
+            background: #f5f5f5;
+        }
+        
+        .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 6%; text-align: center; }
+        .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 44%; }
+        .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 14%; text-align: center; }
+        .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 18%; text-align: center; }
+        .data-table th:nth-child(5), .data-table td:nth-child(5) { width: 18%; text-align: center; }
+        
+        .cell-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 8px;
+        }
+        
+        .select-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 8px;
+            cursor: pointer;
+        }
+        
+        .align-right { text-align: right; }
+        .align-center { text-align: center; }
+
+        .billing-summary {
+            display: flex;
+            border-bottom: 1px solid #000;
+            background: #ffffff;
+        }
+        .spacer-side { flex: 0.4; background: #ffffff; } 
+        .math-side {
+            flex: 1.6;
+            border-left: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+        }
+        .math-row {
+            display: flex;
+            border-bottom: 1px solid #000;
+            font-size: 8px;
+            align-items: center;
+            background: #ffffff;
+        }
+        .math-label {
+            padding: 2px 4px;
+            font-weight: bold;
+            width: 52%;
+            border-right: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+        }
+        .math-input-wrap {
+            padding: 2px 4px;
+            width: 48%;
+            background: #ffffff;
+        }
+        
+        .words-section {
+            border-bottom: 1px solid #000;
+            padding: 2px 4px;
+            background: #ffffff;
+        }
+        .words-title { font-weight: bold; font-size: 7.5px; }
+        .words-output { font-size: 7.5px; font-style: italic; color: #333; margin-top: 1px; }
+
+        .chk-container {
+            display: inline-flex;
+            align-items: center;
+            font-size: 7px;
+            cursor: pointer;
+            gap: 1px;
+            font-weight: normal;
+        }
+
+        .footer-notes { display: flex; border-bottom: 1px solid #000; background: #ffffff; }
+        .note-chunk { flex: 1; padding: 3px 4px; background: #ffffff; }
+        .note-chunk:first-child { border-right: 1px solid #000; }
+        .note-title { font-weight: bold; font-size: 8px; margin-bottom: 1px; }
+        .vision-text { font-size: 7px; font-style: italic; color: #444; margin-top: 2px; line-height: 1.1; }
+
+        .signature-area { display: flex; width: 100%; background: #ffffff; }
+        .sig-box-left {
+            width: 50%;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3px;
+            position: relative;
+            background: #ffffff;
+        }
+        .sig-box-right {
+            width: 50%;
+            border-left: 1px solid #000;
+            height: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 3px;
+            align-items: center;
+            background: #ffffff;
+        }
+        .sig-title { font-weight: bold; font-size: 8px; width: 100%; }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 24px;
+        }
+        .sig-canvas {
+            border: 1px dashed #ccc;
+            border-radius: 2px;
+            width: 100%;
+            height: 100%;
+            background-color: #fafafa;
+        }
+        .clear-sig-btn {
+            position: absolute;
+            right: 2px;
+            bottom: 1px;
+            background: #e11d48;
+            color: white;
+            border: none;
+            font-size: 6.5px;
+            padding: 0px 1px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .driver-sig-svg {
+            width: 55px;
+            height: 18px;
+            margin: auto;
+        }
+        .sig-designation { text-align: center; font-size: 7.5px; font-weight: bold; width: 100%; }
+        
+        .render-text-span {
+            font-size: 8px;
+            font-weight: normal;
+            display: inline-block;
+        }
+
+        .history-panel {
+            width: 100%; 
+            background: white;
+            padding: 6px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+        .history-title {
+            font-size: 9px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 2px;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 6px;
+            border-bottom: 1px solid #eee;
+            font-size: 8px;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background-color: #f8fafc;
+        }
+
+        @media print {
+            body { background-color: #fff; padding: 0; justify-content: flex-start; }
+            .action-bar, .history-panel, .add-row-btn, .clear-sig-btn { display: none !important; }
+            .sig-canvas { border: none !important; background: transparent !important; }
+            .a4-landscape-container { box-shadow: none; padding: 20px 0 !important; width: 100% !important; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="action-bar">
+            <button class="whatsapp-super-btn" onclick="executeMasterAction()">💬 Save, Copy Image & Open WhatsApp</button>
+        </div>
+
+        <div class="a4-landscape-container" id="a4PaperSheet">
+            <div class="main-title">Bill of<br>Supply</div>
+            
+            <div class="outer-matrix">
+                <div class="header-block">
+                    <div class="logo-container">
+                        <!-- Solid Background Royal Blue & Golden Emblem with Custom 'PARI' Monogram -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="logo-img">
+                            <defs>
+                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#D4AF37"/>
+                                    <stop offset="50%" stop-color="#FFF2B2"/>
+                                    <stop offset="100%" stop-color="#AA771C"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Solid Background to Prevent Transparency Issue on WhatsApp -->
+                            <rect width="100" height="100" fill="#0b2341"/>
+                            <!-- Outer Gold Ring -->
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="url(#goldGrad)" stroke-width="3"/>
+                            <circle cx="50" cy="50" r="41" fill="none" stroke="url(#goldGrad)" stroke-width="1" stroke-dasharray="2,2"/>
+                            
+                            <!-- Stylized 'P' Monogram / Crest -->
+                            <path d="M 38 25 L 38 75 M 38 25 L 58 25 C 68 25, 68 45, 58 45 L 38 45" fill="none" stroke="url(#goldGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <!-- Brand Text inside Logo -->
+                            <text x="50" y="86" font-size="7.5" font-weight="bold" fill="#FFF2B2" text-anchor="middle" font-family="Arial">PARI</text>
+                        </svg>
+                    </div>
+                    <div class="brand-details">
+                        <h1 class="brand-name" style="color: #0d233a; font-size: 11px;">PARI TOUR & TRAVELS</h1>
+                        <div class="brand-loc">PIPELINE ROAD NEAR HANUMAN MANDIR KAPURBAVDI NALPADA THANE W 400607</div>
+                        
+                        <div class="driver-info-grid">
+                            <div class="grid-two-col">
+                                <div class="field-row w-half-left">
+                                    <span>DRIVER:</span>
+                                    <input type="text" id="driver_name" class="fill-blank locked-field" value="rajeet yadav" readonly>
+                                </div>
+                                <div class="field-row w-half-right">
+                                    <span>CAR:</span>
+                                    <input type="text" id="car_no" class="fill-blank locked-field" value="MH04MH0062" readonly>
+                                </div>
+                            </div>
+                            <div class="grid-two-col">
+                                <div class="field-row w-half-left">
+                                    <span>Phone:</span>
+                                    <input type="text" class="fill-blank locked-field" value="7021148962" readonly>
+                                </div>
+                                <div class="field-row w-half-right">
+                                    <span>State:</span>
+                                    <input type="text" class="fill-blank locked-field" value="Maharashtra" readonly>
+                                </div>
+                            </div>
+                            <div class="field-row w-full-row">
+                                <span>Email:</span>
+                                <input type="text" class="fill-blank locked-field" value="yadavrajit458@gmail.com" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two-column-split">
+                    <div class="col-box">
+                        <div class="sect-header">Bill To:</div>
+                        <div class="field-row" style="margin-bottom: 2px;">
+                            <span>name</span>
+                            <input type="text" id="cust_name" class="fill-blank text-target">
+                        </div>
+                        <div class="field-row">
+                            <span>Contact:</span>
+                            <input type="text" id="cust_phone" class="fill-blank text-target">
+                        </div>
+                    </div>
+                    <div class="col-box">
+                        <div class="sect-header">Invoice Details:</div>
+                        <div class="field-row" style="margin-bottom: 2px;">
+                            <span>No:</span>
+                            <input type="text" id="invoice_no" class="fill-blank text-target" readonly>
+                        </div>
+                        <div class="field-row">
+                            <span>Date:</span>
+                            <input type="text" id="invoice_date" class="fill-blank text-target">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-and-summary-container">
+                    <table class="data-table" id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Trip Details</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th style="text-align: center;">Price (₹)</th>
+                                <th style="text-align: center;">Amt (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="row-num">1</td>
+                                <td>
+                                    <select class="select-input text-target selection-field">
+                                        <option value="">-- Select Trip --</option>
+                                        <option value="One way trip">One way trip</option>
+                                        <option value="Two way trip">Two way trip</option>
+                                        <option value="Rental (8h.80km)">Rental (8h.80km)</option>
+                                        <option value="Rental (6h.60km)">Rental (6h.60km)</option>
+                                        <option value="Rental (4h.40km)">Rental (4h.40km)</option>
+                                        <option value="Mumbai darshan">Mumbai darshan</option>
+                                        <option value="Out station">Out station</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="cell-input align-center qty-input text-target" oninput="calculateTotals()"></td>
+                                <td><input type="text" class="cell-input align-right price-input text-target" oninput="calculateTotals()"></td>
+                                <td><input type="text" class="cell-input align-right amt-input text-target" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="billing-summary">
+                        <div class="spacer-side"></div>
+                        <div class="math-side">
+                            <div class="math-row">
+                                <div class="math-label">Sub Total</div>
+                                <div class="math-input-wrap"><input type="text" id="sub_total" class="cell-input align-right text-target" readonly></div>
+                            </div>
+                            <div class="math-row">
+                                <div class="math-label">Total</div>
+                                <div class="math-input-wrap"><input type="text" id="total_amount" class="cell-input align-right text-target" readonly></div>
+                            </div>
+                            
+                            <div class="words-section">
+                                <div class="words-title">Amount In Words:</div>
+                                <div id="amount_in_words" class="words-output">Zero Rupees Only</div>
+                            </div>
+                            
+                            <div class="math-row">
+                                <div class="math-label">
+                                    <span>Received</span>
+                                    <label class="chk-container">
+                                        <input type="checkbox" id="paid_full_chk" onchange="togglePaidFull()"> Full
+                                    </label>
+                                </div>
+                                <div class="math-input-wrap"><input type="text" id="received_amt" class="cell-input align-right text-target" oninput="calculateTotals()"></div>
+                            </div>
+                            <div class="math-row" style="border-bottom: none;">
+                                <div class="math-label">Balance</div>
+                                <div class="math-input-wrap"><input type="text" id="balance_amt" class="cell-input align-right text-target" readonly></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-notes">
+                    <div class="note-chunk">
+                        <div class="note-title">Location:</div>
+                        <input type="text" class="cell-input text-target" placeholder="Enter location details...">
+                    </div>
+                    <div class="note-chunk">
+                        <div class="note-title">Vision:</div>
+                        <div class="vision-text">To deliver trusted, comfortable, and customer-first mobility solutions with unmatched safety and reliability.</div>
+                    </div>
+                </div>
+
+                <div class="signature-area">
+                    <div class="sig-box-left">
+                        <div class="sig-title">Customer Signature:</div>
+                        <div class="canvas-container">
+                            <canvas id="customerSigCanvas" class="sig-canvas"></canvas>
+                            <button type="button" class="clear-sig-btn" onclick="clearCustomerSignature()">Clear</button>
+                        </div>
+                    </div>
+                    
+                    <div class="sig-box-right">
+                        <div class="sig-title">For PARI TOUR & TRAVELS:</div>
+                        <div class="driver-sig-svg">
+                            <svg viewBox="0 0 100 50" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 12 35 C 18 20, 22 12, 30 18 C 38 24, 25 42, 38 25 C 45 15, 55 12, 62 28 C 65 35, 72 20, 88 12" 
+                                      fill="none" stroke="#000000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="sig-designation">Authorized Signatory</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn add-row-btn" onclick="addNewRow()">➕ Add New Row</button>
+
+        <div class="history-panel">
+            <div class="history-title">📜 Saved Bills History (101 onwards)</div>
+            <ul class="history-list" id="historyLogList"></ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('customerSigCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHistoryList();
+            autoGenerateMeta();
+            initializeSignatureCanvas();
+        });
+
+        function initializeSignatureCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 1.5;
+            ctx.lineCap = 'round';
+
+            function getTouchPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                return { x: (e.touches[0].clientX - rect.left), y: (e.touches[0].clientY - rect.top) };
+            }
+
+            canvas.addEventListener('touchstart', (e) => {
+                isDrawing = true;
+                const m = getTouchPos(e);
+                ctx.beginPath(); ctx.moveTo(m.x, m.y);
+                e.preventDefault();
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                if (!isDrawing) return;
+                const m = getTouchPos(e);
+                ctx.lineTo(m.x, m.y); ctx.stroke();
+                e.preventDefault();
+            });
+            canvas.addEventListener('touchend', () => { isDrawing = false; });
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY);
+            });
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDrawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); }
+            });
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+        }
+
+        function clearCustomerSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function autoGenerateMeta() {
+            const today = new Date();
+            const formattedDate = today.getDate().toString().padStart(2, '0') + '/' + 
+                                  (today.getMonth() + 1).toString().padStart(2, '0') + '/' + 
+                                  today.getFullYear();
+            document.getElementById('invoice_date').value = formattedDate;
+            
+            let history = JSON.parse(localStorage.getItem('billHistory')) || [];
+            let nextInvoiceNo = 101;
+            if (history.length > 0) {
+                const numericIds = history.map(item => parseInt(item.id)).filter(id => !isNaN(id));
+                if (numericIds.length > 0) {
+                    nextInvoiceNo = Math.max(...numericIds) + 1;
+                }
+            }
+            document.getElementById('invoice_no').value = nextInvoiceNo;
+        }
+
+        function addNewRow() {
+            const tableBody = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
+            const nextIndex = tableBody.rows.length + 1;
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td class="row-num">${nextIndex}</td>
+                <td>
+                    <input type="text" class="cell-input text-target dynamic-text-field" placeholder="Type trip details here...">
+                </td>
+                <td><input type="text" class="cell-input align-center qty-input text-target" oninput="calculateTotals()"></td>
+                <td><input type="text" class="cell-input align-right price-input text-target" oninput="calculateTotals()"></td>
+                <td><input type="text" class="cell-input align-right amt-input text-target" readonly></td>
+            `;
+        }
+
+        function togglePaidFull() {
+            const isChecked = document.getElementById('paid_full_chk').checked;
+            const subTotal = parseFloat(document.getElementById('sub_total').value) || 0;
+            document.getElementById('received_amt').value = isChecked ? subTotal.toFixed(2) : "";
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let runningSubTotal = 0;
+            const rows = document.querySelectorAll('#itemsTable tbody tr');
+            
+            rows.forEach((row) => {
+                const qtyInput = row.querySelector('.qty-input');
+                const priceInput = row.querySelector('.price-input');
+                const amtInput = row.querySelector('.amt-input');
+                
+                let qty = parseFloat(qtyInput.value) || 1;
+                if (qty <= 0) qty = 1;
+                let price = parseFloat(priceInput.value) || 0;
+                
+                let calculatedAmt = price * qty;
+                amtInput.value = calculatedAmt > 0 ? calculatedAmt.toFixed(2) : "";
+                runningSubTotal += calculatedAmt;
+            });
+
+            document.getElementById('sub_total').value = runningSubTotal.toFixed(2);
+            document.getElementById('total_amount').value = runningSubTotal.toFixed(2);
+
+            const received = parseFloat(document.getElementById('received_amt').value) || 0;
+            const balance = runningSubTotal - received;
+            document.getElementById('balance_amt').value = balance.toFixed(2);
+            document.getElementById('amount_in_words').innerText = numberToWords(Math.round(runningSubTotal)) + " Rupees Only";
+        }
+
+        function numberToWords(num) {
+            if (num === 0) return 'Zero';
+            const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+            const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            
+            function h(n) {
+                if (n < 20) return a[n];
+                return b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
+            }
+            function div(n) {
+                if (n < 100) return h(n);
+                return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 !== 0 ? ' ' + h(n % 100) : '');
+            }
+
+            let str = '', chunks = [
+                {amt: 10000000, label: 'Crore'}, {amt: 100000, label: 'Lakh'},
+                {amt: 1000, label: 'Thousand'}, {amt: 1, label: ''}
+            ];
+
+            for (let i = 0; i < chunks.length; i++) {
+                let cnt = Math.floor(num / chunks[i].amt);
+                num %= chunks[i].amt;
+                if (cnt > 0) str += (str ? ' ' : '') + div(cnt) + (chunks[i].label ? ' ' + chunks[i].label : '');
+            }
+            return str;
+        }
+
+        function executeMasterAction() {
+            const invoiceNo = document.getElementById('invoice_no').value || "101";
+            const custName = document.getElementById('cust_name').value || "Unknown";
+            const totalAmt = document.getElementById('total_amount').value || "0";
+            const dateStr = document.getElementById('invoice_date').value;
+            const rowCount = document.getElementById('itemsTable').getElementsByTagName('tbody')[0].rows.length;
+            
+            const allInputs = document.querySelectorAll('.outer-matrix input[type="text"]');
+            const stateData = []; allInputs.forEach(input => { stateData.push(input.value); });
+            
+            const selectedTrips = []; document.querySelectorAll('.selection-field').forEach(sel => { selectedTrips.push(sel.value); });
+            const typedTrips = []; document.querySelectorAll('.dynamic-text-field').forEach(txt => { typedTrips.push(txt.value); });
+            
+            const quantities = []; document.querySelectorAll('.qty-input').forEach(q => { quantities.push(q.value); });
+
+            const isPaidChecked = document.getElementById('paid_full_chk').checked;
+            const sigImgData = canvas.toDataURL();
+
+            const billRecord = { 
+                id: invoiceNo, custName: custName, totalAmt: totalAmt, date: dateStr, 
+                rowCount: rowCount, formData: stateData, selections: selectedTrips, typedFields: typedTrips, quantities: quantities, paidChecked: isPaidChecked, customerSignature: sigImgData
+            };
+            
+            let history = JSON.parse(localStorage.getItem('billHistory')) || [];
+            history = history.filter(item => item.id !== invoiceNo);
+            history.unshift(billRecord);
+            history.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+            localStorage.setItem('billHistory', JSON.stringify(history));
+            loadHistoryList();
+
+            const target = document.getElementById('a4PaperSheet'); 
+            preProcessDOMBeforeRender(target);
+            
+            html2canvas(target, { scale: 3, useCORS: true, logging: false }).then(canvasObj => {
+                postProcessDOMAfterRender(target);
+                
+                canvasObj.toBlob(blob => {
+                    navigator.clipboard.write([ new ClipboardItem({ "image/png": blob }) ]).then(() => {
+                        triggerWhatsAppOpen();
+                    }).catch(() => {
+                        triggerWhatsAppOpen();
+                    });
+                }, "image/png");
+            });
+        }
+
+        function triggerWhatsAppOpen() {
+            const phone = document.getElementById('cust_phone').value.replace(/\D/g, '');
+            if(!phone) { alert("बिल इमेज क्लिपबोर्ड पर कॉपी हो गई है! व्हाट्सएप खोलने के लिए कस्टमर का नंबर दर्ज करें।"); return; }
+            
+            const finalPhone = phone.length === 10 ? '91' + phone : phone;
+            window.open(`https://api.whatsapp.com/send?phone=${finalPhone}&text=`, '_blank');
+        }
+
+        function loadHistoryList() {
+            const listContainer = document.getElementById('historyLogList');
+            listContainer.innerHTML = '';
+            let history = JSON.parse(localStorage.getItem('billHistory')) || [];
+            
+            history.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+            
+            if(history.length === 0) {
+                listContainer.innerHTML = '<li style="color:#888; padding: 4px; font-size:8px;">No records found.</li>';
+                return;
+            }
+            history.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = `<div>Bill No: <b>${item.id}</b> | ${item.custName} | ${item.date}</div><div>₹${item.totalAmt}</div>`;
+                li.onclick = () => reloadBillFromHistory(item.id);
+                listContainer.appendChild(li);
+            });
+        }
+
+        function reloadBillFromHistory(id) {
+            const history = JSON.parse(localStorage.getItem('billHistory')) || [];
+            const record = history.find(item => item.id === id);
+            if(record && record.formData) {
+                const tableBody = document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = ''; 
+                
+                for(let i=0; i < record.rowCount; i++) {
+                    const newRow = tableBody.insertRow();
+                    if(i === 0) {
+                        newRow.innerHTML = `
+                            <td class="row-num">1</td>
+                            <td>
+                                <select class="select-input text-target selection-field">
+                                    <option value="">-- Select Trip --</option>
+                                    <option value="One way trip">One way trip</option>
+                                    <option value="Two way trip">Two way trip</option>
+                                    <option value="Rental (8h.80km)">Rental (8h.80km)</option>
+                                    <option value="Rental (6h.60km)">Rental (6h.60km)</option>
+                                    <option value="Rental (4h.40km)">Rental (4h.40km)</option>
+                                    <option value="Mumbai darshan">Mumbai darshan</option>
+                                    <option value="Out station">Out station</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="cell-input align-center qty-input text-target" oninput="calculateTotals()"></td>
+                            <td><input type="text" class="cell-input align-right price-input text-target" oninput="calculateTotals()"></td>
+                            <td><input type="text" class="cell-input align-right amt-input text-target" readonly></td>
+                        `;
+                    } else {
+                        newRow.innerHTML = `
+                            <td class="row-num">${i+1}</td>
+                            <td>
+                                <input type="text" class="cell-input text-target dynamic-text-field" placeholder="Type trip details here...">
+                            </td>
+                            <td><input type="text" class="cell-input align-center qty-input text-target" oninput="calculateTotals()"></td>
+                            <td><input type="text" class="cell-input align-right price-input text-target" oninput="calculateTotals()"></td>
+                            <td><input type="text" class="cell-input align-right amt-input text-target" readonly></td>
+                        `;
+                    }
+                }
+
+                if(record.selections && document.querySelector('.selection-field')) {
+                    document.querySelector('.selection-field').value = record.selections[0] || "";
+                }
+
+                if(record.typedFields) {
+                    document.querySelectorAll('.dynamic-text-field').forEach((txt, idx) => {
+                        if(record.typedFields[idx] !== undefined) txt.value = record.typedFields[idx];
+                    });
+                }
+
+                if(record.quantities) {
+                    document.querySelectorAll('.qty-input').forEach((q, idx) => {
+                        if(record.quantities[idx] !== undefined) q.value = record.quantities[idx];
+                    });
+                }
+
+                const allInputs = document.querySelectorAll('.outer-matrix input[type="text"]');
+                allInputs.forEach((input, index) => {
+                    if(record.formData[index] !== undefined) input.value = record.formData[index];
+                });
+
+                document.getElementById('paid_full_chk').checked = record.paidChecked || false;
+                calculateTotals();
+
+                if (record.customerSignature) {
+                    const img = new Image(); img.src = record.customerSignature;
+                    img.onload = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0); };
+                }
+            }
+        }
+
+        function preProcessDOMBeforeRender(target) {
+            const editableInputs = target.querySelectorAll('input[type="text"]');
+            editableInputs.forEach(input => {
+                const parent = input.parentNode;
+                const replacementSpan = document.createElement('span');
+                replacementSpan.className = 'temp-span-fix render-text-span';
+                if (input.classList.contains('align-right')) {
+                    replacementSpan.style.width = '100%'; replacementSpan.style.textAlign = 'right';
+                } else if (input.classList.contains('align-center')) {
+                    replacementSpan.style.width = '100%'; replacementSpan.style.textAlign = 'center';
+                }
+                replacementSpan.innerText = input.value || " ";
+                input.style.display = 'none'; parent.appendChild(replacementSpan);
+            });
+            
+            const selects = target.querySelectorAll('select');
+            selects.forEach(select => {
+                const parent = select.parentNode;
+                const replacementSpan = document.createElement('span');
+                replacementSpan.className = 'temp-span-fix render-text-span';
+                replacementSpan.innerText = select.value || " ";
+                select.style.display = 'none'; parent.appendChild(replacementSpan);
+            });
+        }
+
+        function postProcessDOMAfterRender(target) {
+            const tempSpans = target.querySelectorAll('.temp-span-fix');
+            tempSpans.forEach(span => span.remove());
+            const inputs = target.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => input.style.display = 'block');
+            const selects = target.querySelectorAll('select');
+            selects.forEach(select => select.style.display = 'block');
+        }
+    </script>
+</body>
+</html>
